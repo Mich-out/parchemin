@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le parchemin</title>
+    <title>Le parchemin d'Emma et Michel</title>
     <style>
         /* Importer la police Papyrus */
         @font-face {
@@ -42,7 +42,7 @@
 
         /* Styles pour la liste d'activités */
         .activity-list {
-            width: 60%;
+            width: 70%;
             max-width: 1200px; /* Augmente la largeur maximale pour les grands écrans */
             margin-bottom: 100px; /* Assure qu'il y a assez d'espace en bas pour éviter la superposition avec le formulaire */
         }
@@ -54,6 +54,7 @@
         }
 
         .activity-list li {
+            background-color: rgba(255, 255, 255, 0);
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 5px;
@@ -102,6 +103,20 @@
             background-color: #45a049;
         }
 
+        /* Style du message de confirmation */
+        .confirmation-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+            font-size: 1em;
+        }
+
         /* Media queries pour les écrans plus petits */
         @media (max-width: 600px) {
             body {
@@ -140,13 +155,15 @@
 
     <!-- Section du formulaire -->
     <div class="form-container">
-        <form 
-            method="POST" 
-            action="https://script.google.com/macros/s/AKfycbz1N4wstMCOVd1ySVg-8p_cGZQx-iCvFpSlamotuKOaUgNOX9Yg41kQ-Sn070y_sfTH1A/exec"
-        >
+        <form id="activityForm">
             <input name="Description" type="text" placeholder="Écris ton activité de folie" required>
             <button type="submit">Envoyer</button>
         </form>
+    </div>
+
+    <!-- Message de confirmation -->
+    <div id="confirmationMessage" class="confirmation-message">
+        Activité ajoutée avec succès !
     </div>
 
     <script>
@@ -171,6 +188,38 @@
                 console.error('Erreur lors du chargement des activités:', error);
             }
         }
+
+        // Fonction pour gérer la soumission du formulaire
+        document.getElementById('activityForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const formData = new FormData(this);
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.result === 'success') {
+                    // Afficher le message de confirmation
+                    const confirmationMessage = document.getElementById('confirmationMessage');
+                    confirmationMessage.style.display = 'block';
+
+                    // Masquer le message après 3 secondes
+                    setTimeout(() => {
+                        confirmationMessage.style.display = 'none';
+                    }, 3000);
+
+                    // Recharger les activités après l'ajout
+                    loadActivities();
+                } else {
+                    console.error('Erreur lors de l\'ajout de l\'activité:', result);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la soumission du formulaire:', error);
+            }
+        });
 
         // Charger les activités lors du chargement de la page
         window.onload = loadActivities;
