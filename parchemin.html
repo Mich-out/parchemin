@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste d'activités</title>
+    <style>
+        /* Importer la police Papyrus */
+        @font-face {
+            font-family: 'Papyrus';
+            src: local('Papyrus'), url('https://fonts.googleapis.com/css2?family=Papyrus&display=swap');
+        }
+
+        /* Styles de base pour le body */
+        body {
+            font-family: 'Papyrus', cursive;
+            font-size: 1em; /* Taille de police par défaut */
+            margin: 0;
+            padding: 0;
+            background-image: url('img/grunge-paper-background.jpg'); /* Chemin vers l'image locale */
+            background-size: cover;
+            background-position: center;
+            color: black; /* Couleur du texte du corps en noir */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            overflow: auto; /* Permet le défilement de la page */
+        }
+
+        /* Styles pour le titre */
+        h1 {
+            font-family: 'Papyrus', cursive;
+            color: black;
+            text-align: center;
+            margin-top: 20px; /* Espacement au-dessus du titre */
+            margin-bottom: 20px; /* Espacement en-dessous du titre */
+            font-size: 2.3em; /* Taille du titre plus grande */
+        }
+
+        /* Styles pour la liste d'activités */
+        .activity-list {
+            width: 90%;
+            max-width: 800px;
+            margin-bottom: 60px; /* Espacement en bas pour éviter la superposition avec le formulaire */
+        }
+
+        .activity-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .activity-list li {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        /* Styles pour le formulaire */
+        .form-container {
+            position: fixed;
+            top: 20px; /* Distance du haut de la fenêtre */
+            right: 20px; /* Distance du bord droit de la fenêtre */
+            width: 250px; /* Largeur du formulaire */
+            background-color: rgba(0, 0, 0, 0.7); /* Arrière-plan transparent pour améliorer la lisibilité */
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000; /* Assure que le formulaire reste au-dessus du contenu */
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container input,
+        .form-container button {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .form-container input {
+            background-color: white;
+            color: black;
+        }
+
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Media queries pour les écrans plus petits */
+        @media (max-width: 600px) {
+            body {
+                font-size: 0.8em; /* Réduit la taille de la police sur les petits écrans */
+            }
+
+            .activity-list {
+                width: 95%;
+                margin-bottom: 80px; /* Augmente l'espace en bas pour éviter la superposition avec le formulaire */
+            }
+
+            .form-container {
+                width: 90%; /* Réduit la largeur du formulaire sur les petits écrans */
+                top: auto; /* Positionne le formulaire en bas */
+                bottom: 20px; /* Distance du bas de la fenêtre */
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Titre de la page -->
+    <h1>Le parchemin d'Emma et Michel</h1>
+
+    <!-- Section des activités -->
+    <div class="activity-list">
+        <ul id="activityList">
+            <!-- Les activités seront ajoutées ici dynamiquement -->
+        </ul>
+    </div>
+
+    <!-- Section du formulaire -->
+    <div class="form-container">
+        <form 
+            method="POST" 
+            action="https://script.google.com/macros/s/AKfycbz1N4wstMCOVd1ySVg-8p_cGZQx-iCvFpSlamotuKOaUgNOX9Yg41kQ-Sn070y_sfTH1A/exec"
+        >
+            <input name="Description" type="text" placeholder="Écris ton activité de folie" required>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+
+    <script>
+        // URL de l'application Web déployée pour récupérer les données
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbz1N4wstMCOVd1ySVg-8p_cGZQx-iCvFpSlamotuKOaUgNOX9Yg41kQ-Sn070y_sfTH1A/exec';
+
+        // Fonction pour charger les activités depuis la Google Sheet
+        async function loadActivities() {
+            try {
+                const response = await fetch(apiUrl);
+                const activities = await response.json();
+
+                const activityList = document.getElementById('activityList');
+                activityList.innerHTML = ''; // Réinitialiser la liste avant de la remplir
+
+                activities.forEach(activity => {
+                    const li = document.createElement('li');
+                    li.textContent = activity.Description; // Affiche la valeur de la colonne 'Description'
+                    activityList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Erreur lors du chargement des activités:', error);
+            }
+        }
+
+        // Charger les activités lors du chargement de la page
+        window.onload = loadActivities;
+    </script>
+</body>
+</html>
