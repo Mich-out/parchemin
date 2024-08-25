@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste d'activités</title>
+    <title>Le parchemin</title>
     <style>
         /* Importer la police Papyrus */
         @font-face {
@@ -26,7 +26,7 @@
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
-            overflow: auto; /* Permet le défilement de la page */
+            overflow-x: hidden; /* Permet le défilement horizontal si nécessaire */
         }
 
         /* Styles pour le titre */
@@ -34,16 +34,17 @@
             font-family: 'Papyrus', cursive;
             color: black;
             text-align: center;
-            margin-top: 20px; /* Espacement au-dessus du titre */
+            margin-top: 50px; /* Espacement au-dessus du titre pour éviter la superposition avec le formulaire */
             margin-bottom: 20px; /* Espacement en-dessous du titre */
-            font-size: 2.3em; /* Taille du titre plus grande */
+            font-size: 3em; /* Taille du titre plus grande */
+            z-index: 10; /* Assure que le titre est au-dessus du formulaire */
         }
 
         /* Styles pour la liste d'activités */
         .activity-list {
-            width: 90%;
-            max-width: 800px;
-            margin-bottom: 60px; /* Espacement en bas pour éviter la superposition avec le formulaire */
+            width: 60%;
+            max-width: 1200px; /* Augmente la largeur maximale pour les grands écrans */
+            margin-bottom: 100px; /* Assure qu'il y a assez d'espace en bas pour éviter la superposition avec le formulaire */
         }
 
         .activity-list ul {
@@ -53,18 +54,18 @@
         }
 
         .activity-list li {
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
             border-radius: 5px;
+            font-size: 2em; /* Augmente la taille du texte des activités */
         }
 
         /* Styles pour le formulaire */
         .form-container {
-            position: fixed;
+            position: sticky;
             top: 20px; /* Distance du haut de la fenêtre */
             right: 20px; /* Distance du bord droit de la fenêtre */
-            width: 250px; /* Largeur du formulaire */
+            width: 300px; /* Largeur du formulaire */
             background-color: rgba(0, 0, 0, 0.7); /* Arrière-plan transparent pour améliorer la lisibilité */
             padding: 20px;
             border-radius: 10px;
@@ -87,12 +88,14 @@
         .form-container input {
             background-color: white;
             color: black;
+            font-size: 1em; /* Taille de la police du champ de texte */
         }
 
         .form-container button {
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
+            font-size: 1em; /* Taille de la police du bouton */
         }
 
         .form-container button:hover {
@@ -102,12 +105,12 @@
         /* Media queries pour les écrans plus petits */
         @media (max-width: 600px) {
             body {
-                font-size: 0.8em; /* Réduit la taille de la police sur les petits écrans */
+                font-size: 0.9em; /* Réduit la taille de la police sur les petits écrans */
             }
 
             .activity-list {
                 width: 95%;
-                margin-bottom: 80px; /* Augmente l'espace en bas pour éviter la superposition avec le formulaire */
+                margin-bottom: 140px; /* Augmente l'espace en bas pour éviter la superposition avec le formulaire */
             }
 
             .form-container {
@@ -115,6 +118,11 @@
                 top: auto; /* Positionne le formulaire en bas */
                 bottom: 20px; /* Distance du bas de la fenêtre */
                 right: 5%;
+            }
+
+            h1 {
+                font-size: 2.5em; /* Réduit la taille du titre sur les petits écrans */
+                margin-top: 60px; /* Ajuste l'espacement en haut */
             }
         }
     </style>
